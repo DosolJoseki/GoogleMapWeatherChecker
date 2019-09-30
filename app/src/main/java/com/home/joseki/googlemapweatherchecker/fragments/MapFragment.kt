@@ -16,8 +16,6 @@ import com.home.joseki.googlemapweatherchecker.model.CityList
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import toothpick.Toothpick
 import com.home.joseki.googlemapweatherchecker.R
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.*
 import com.home.joseki.googlemapweatherchecker.adapters.MapMarkerAdapter
 
@@ -30,32 +28,14 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         @JvmStatic
         fun newInstance() = MapFragment()
 
-        private const val DEF_TYPE = "mipmap"
         private const val ZOOM = 8f
-        private const val DURATION_MS = 100
+        private const val DURATION_MS = 1000
     }
 
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
         googleMap.clear()
-
-        val googlePlex = CameraPosition.builder()
-            .target(LatLng(27.1750, 78.0422))
-            .zoom(ZOOM)
-            .build()
-
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), DURATION_MS, null)
-
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(LatLng(27.1750, 78.0422))
-        )
-    }
-
-    private fun resizeMapIcons(iconName: String, width: Int, height: Int): Bitmap {
-        val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier(iconName, DEF_TYPE, activity!!.packageName))
-        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -79,8 +59,29 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         )
     }
 
-    fun setWeather(weatherInfo: WeatherInfo){
-        googleMap.setInfoWindowAdapter(MapMarkerAdapter(context, weatherInfo))
+    fun setWeatherPins(list: List<WeatherInfo>){
+        if(list.isNullOrEmpty())
+            return
+
+        googleMap.clear()
+
+        val map = mutableMapOf<Marker, WeatherInfo>()
+
+        for(e in list) {
+            map[googleMap.addMarker(
+                MarkerOptions()
+                    .position(LatLng(e.coord.lat, e.coord.lon))
+            )] = e
+        }
+
+        googleMap.setInfoWindowAdapter(MapMarkerAdapter(context, map))
+
+        val googlePlex = CameraPosition.builder()
+            .target(LatLng(list[0].coord.lat, list[0].coord.lon))
+            .zoom(ZOOM)
+            .build()
+
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), DURATION_MS, null)
     }
 
     fun showUpdateProgress(boolean: Boolean){

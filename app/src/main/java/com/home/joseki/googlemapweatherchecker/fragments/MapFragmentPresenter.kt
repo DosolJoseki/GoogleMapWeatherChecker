@@ -18,7 +18,21 @@ class MapFragmentPresenter(
         //    getPokemons(isRandom = false, addToList = false)
 
         compositeDisposable.add(
-        interactor.getForecast("12", "42")
+            interactor.getWeatherByAllCities()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        view.setWeatherPins(it)
+                        view.showUpdateProgress(false)
+                    },
+                    {
+                        Timber.e(it)
+                    }
+                )
+        )
+
+       /* compositeDisposable.add(
+        interactor.getWeatherByCoord("12", "42")
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
@@ -29,17 +43,25 @@ class MapFragmentPresenter(
                     Timber.e(it)
                 }
             )
-        )
+        )*/
 
         /*compositeDisposable.add(
+            interactor.getForecast("12", "42")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        //view.setWeather(it)
+                        view.showUpdateProgress(false)
+                    },
+                    {
+                        Timber.e(it)
+                    }
+                )
+        )*/
+
+       /* compositeDisposable.add(
             interactor.getCities()
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError({
-                    Timber.e(it)
-                })
-                .doOnSuccess {
-                    view.setCity(it)
-                }
                 .subscribe(
                     {
                         view.setCity(it)

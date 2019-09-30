@@ -17,9 +17,9 @@ class CityListSource @Inject constructor(
     }
 
     override fun getCities(): Single<CityList> =
-        Single.create {
+        Single.fromCallable {
             BufferedReader(InputStreamReader(assetManager.open(FILE_NAME))).use {
-                Gson().fromJson(it, CityList::class.java)
+            Gson().fromJson(it, CityList::class.java)
             }
         }
 }

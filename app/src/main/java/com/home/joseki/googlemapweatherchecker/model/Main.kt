@@ -12,5 +12,11 @@ data class Main(
     @SerializedName("pressure")
     var pressure: String = "",
     @SerializedName("temp_max")
-    var tempMax: String = ""
+    var tempMax: String = "",
+    @SerializedName("grnd_level")
+    val grndLevel: String = "",
+    @SerializedName("temp_kf")
+    val tempKf: String = "",
+    @SerializedName("sea_level")
+    val seaLevel: String = ""
 )
