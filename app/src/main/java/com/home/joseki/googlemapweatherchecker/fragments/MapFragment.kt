@@ -19,6 +19,7 @@ import com.home.joseki.googlemapweatherchecker.R
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.*
+import com.home.joseki.googlemapweatherchecker.adapters.MapMarkerAdapter
 
 
 class MapFragment: Fragment(), OnMapReadyCallback {
@@ -28,6 +29,10 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     companion object {
         @JvmStatic
         fun newInstance() = MapFragment()
+
+        private const val DEF_TYPE = "mipmap"
+        private const val ZOOM = 8f
+        private const val DURATION_MS = 100
     }
 
     override fun onMapReady(map: GoogleMap) {
@@ -37,23 +42,19 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
         val googlePlex = CameraPosition.builder()
             .target(LatLng(27.1750, 78.0422))
-            .zoom(8f)
+            .zoom(ZOOM)
             .build()
 
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 100, null);
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), DURATION_MS, null)
 
         googleMap.addMarker(
             MarkerOptions()
                 .position(LatLng(27.1750, 78.0422))
-                .title("Taj Mahal")
-                .snippet("It is located in India")
-                .rotation(3.5.toFloat())
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("cloud", 100, 100)))
-        ).showInfoWindow()
+        )
     }
 
     private fun resizeMapIcons(iconName: String, width: Int, height: Int): Bitmap {
-        val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier(iconName, "mipmap", activity!!.packageName))
+        val imageBitmap = BitmapFactory.decodeResource(resources, resources.getIdentifier(iconName, DEF_TYPE, activity!!.packageName))
         return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
     }
 
@@ -79,9 +80,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     }
 
     fun setWeather(weatherInfo: WeatherInfo){
-        if (weatherInfo == null) {
-            val i = 0
-        }
+        googleMap.setInfoWindowAdapter(MapMarkerAdapter(context, weatherInfo))
     }
 
     fun showUpdateProgress(boolean: Boolean){
