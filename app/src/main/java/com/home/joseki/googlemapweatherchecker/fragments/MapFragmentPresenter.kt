@@ -1,6 +1,8 @@
 package com.home.joseki.googlemapweatherchecker.fragments
 
+import com.home.joseki.googlemapweatherchecker.di.navigation.Screens
 import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
+import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import ru.terrakok.cicerone.Router
@@ -72,5 +74,13 @@ class MapFragmentPresenter(
                     }
                 )
         )*/
+    }
+
+    fun onMarkerClick(weatherInfo: WeatherInfo): Boolean{
+        weatherInfo.let {
+            router.navigateTo(Screens.WeatherInfoScreen(weatherInfo))
+        }
+
+        return false
     }
 }

@@ -2,7 +2,7 @@ package com.home.joseki.googlemapweatherchecker.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ForecastList(
+data class ForecastItem(
     @SerializedName("dt")
     var dt: String = "",
     @SerializedName("rain")

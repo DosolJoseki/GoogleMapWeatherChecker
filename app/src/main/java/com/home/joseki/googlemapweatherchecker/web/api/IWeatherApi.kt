@@ -10,8 +10,8 @@ import retrofit2.http.Query
 interface IWeatherApi {
     @GET("weather")
     fun getWeatherByCoord(
-        @Query("lon") lon: String,
-        @Query("lat") lat: String,
+        @Query("lon") lon: Double,
+        @Query("lat") lat: Double,
         @Query("units") units: String,
         @Header("x-rapidapi-host") host: String,
         @Header("x-rapidapi-key") apiKey: String
@@ -19,9 +19,8 @@ interface IWeatherApi {
 
     @GET("forecast")
     fun getForecastByCoord(
-        @Query("lon") lon: String,
-        @Query("lat") lat: String,
-        @Query("units") units: String,
+        @Query("lon") lon: Double,
+        @Query("lat") lat: Double,
         @Header("x-rapidapi-host") host: String,
         @Header("x-rapidapi-key") apiKey: String
     ): Observable<Forecast>

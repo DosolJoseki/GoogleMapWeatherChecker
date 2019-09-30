@@ -2,7 +2,7 @@ package com.home.joseki.googlemapweatherchecker.di.navigation
 
 import androidx.fragment.app.Fragment
 import com.home.joseki.googlemapweatherchecker.fragments.MapFragment
-import com.home.joseki.googlemapweatherchecker.fragments.WeatherInfoFragment
+import com.home.joseki.googlemapweatherchecker.fragments.WeatherForecastFragment
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
@@ -12,6 +12,6 @@ object Screens {
     }
 
     data class WeatherInfoScreen(val weatherInfo: WeatherInfo) : SupportAppScreen() {
-        override fun getFragment(): Fragment = WeatherInfoFragment.newInstance(weatherInfo)
+        override fun getFragment(): Fragment = WeatherForecastFragment.newInstance(weatherInfo)
     }
 }

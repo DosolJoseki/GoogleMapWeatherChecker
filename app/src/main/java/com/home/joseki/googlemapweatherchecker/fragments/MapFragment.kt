@@ -74,6 +74,10 @@ class MapFragment: Fragment(), OnMapReadyCallback {
             )] = e
         }
 
+        googleMap.setOnInfoWindowClickListener {
+            presenter.onMarkerClick(map[it]!!)
+        }
+
         googleMap.setInfoWindowAdapter(MapMarkerAdapter(context, map))
 
         val googlePlex = CameraPosition.builder()

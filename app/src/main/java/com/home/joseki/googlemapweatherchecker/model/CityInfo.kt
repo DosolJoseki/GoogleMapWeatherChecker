@@ -8,9 +8,9 @@ data class CityInfo(
     @SerializedName("city_ascii")
     val cityAscii: String = "",
     @SerializedName("lat")
-    val lat: String = "",
+    val lat: Double = 0.0,
     @SerializedName("lng")
-    val lon:String = "",
+    val lon:Double = 0.0,
     @SerializedName("country")
     val country: String = "",
     @SerializedName("iso2")
