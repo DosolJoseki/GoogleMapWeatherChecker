@@ -1,22 +1,24 @@
 package com.home.joseki.googlemapweatherchecker.interactors
 
-import android.annotation.SuppressLint
-import com.home.joseki.googlemapweatherchecker.model.CityList
-import com.home.joseki.googlemapweatherchecker.model.Coord
-import com.home.joseki.googlemapweatherchecker.model.Forecast
-import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
+import com.home.joseki.googlemapweatherchecker.model.*
 import com.home.joseki.googlemapweatherchecker.repositories.ICityRepository
 import com.home.joseki.googlemapweatherchecker.repositories.IMapWeatherRepository
 import io.reactivex.Observable
 import io.reactivex.Single
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class MapWeatherInteractor @Inject constructor(
     private val weatherRepository: IMapWeatherRepository,
     private val cityRepository: ICityRepository
-): IMapWeatherInteractor {
+) : IMapWeatherInteractor {
+
+    private lateinit var selectedForecast: Forecast
+
+    companion object {
+        private const val START_INDEX = 0
+        private const val START_INDEX_TIME = 11
+        private const val END_INDEX_DATE = 10
+    }
 
     override fun getWeatherByAllCities(): Single<List<WeatherInfo>> =
         cityRepository.getCities()
@@ -25,33 +27,54 @@ class MapWeatherInteractor @Inject constructor(
             }
             .toList()
 
-    override fun getForecast(coord: Coord): Observable<Forecast> = weatherRepository.getForecast(coord)
+    override fun getForecast(coord: Coord): Observable<Forecast> =
+        weatherRepository.getForecast(coord)
 
     override fun getCities(): Single<CityList> = cityRepository.getCities()
 
-    override fun getWeatherByCoord(coord: Coord): Observable<WeatherInfo> = weatherRepository.getWeather(coord)
+    override fun getWeatherByCoord(coord: Coord): Observable<WeatherInfo> =
+        weatherRepository.getWeather(coord)
 
 
-    private fun getWeatherIterable(cityList: CityList): Observable<WeatherInfo>{
+    private fun getWeatherIterable(cityList: CityList): Observable<WeatherInfo> {
         return Observable.fromIterable(cityList.Cities)
-            .flatMap { weatherRepository.getWeather(Coord(it.lon, it.lat)) }
+            .flatMap {
+                weatherRepository.getWeather(Coord(it.lon, it.lat))
+            }
     }
 
-    private fun getWeekForecast(forecast: Forecast): Observable<Forecast>{
-        val date: Date?
+    override fun getWeekForecast(forecast: Forecast): List<ForecastItem> {
+        selectedForecast = forecast
+        val date: String
+        var fc: List<ForecastItem> = ArrayList()
 
         forecast.let {
             it.list
-                ?.firstOrNull()
+                .firstOrNull()
                 ?.dtTxt
-                ?.let { dt ->  date = SimpleDateFormat("dd-MM-yyyy", Locale.GERMAN).parse(dt) }
+                ?.let { dt ->
+                    date = dt.substring(START_INDEX_TIME)
+                    fc = it.list
+                        .filter { a ->
+                            a.dtTxt.substring(START_INDEX_TIME) == date
+                        }
 
-            //складываем форкасты по дате начиная от полученной
+                    return fc
+                }
         }
 
-        Observable.fromIterable(forecast.list)
-            .map { it }
+        return fc
+    }
 
-        return null
+    override fun getDailyForecast(item: ForecastItem): List<ForecastItem> {
+        var fc: List<ForecastItem>
+
+        selectedForecast.list.let {
+            fc = it.filter { a ->
+                a.dtTxt.substring(START_INDEX, END_INDEX_DATE) == item.dtTxt.substring(START_INDEX, END_INDEX_DATE)
+            }
+
+            return fc
+        }
     }
 }

@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Weather(
     @SerializedName("icon")
-    private val icon: String = "",
+    val icon: String = "",
     @SerializedName("description")
-    private val description: String = "",
+    val description: String = "",
     @SerializedName("main")
-    private val main: String = "",
+    val main: String = "",
     @SerializedName("id")
-    private val id: String = ""
+    val id: String = ""
 )

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Main(
     @SerializedName("temp")
-    var temp: String = "",
+    var temp: Double = 0.0,
     @SerializedName("temp_min")
     var tempMin: String = "",
     @SerializedName("humidity")

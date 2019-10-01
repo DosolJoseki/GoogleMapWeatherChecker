@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Clouds(
     @SerializedName("all")
-    private val all: String = ""
+    val all: String = ""
 )

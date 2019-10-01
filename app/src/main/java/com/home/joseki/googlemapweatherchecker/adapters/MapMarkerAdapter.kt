@@ -8,6 +8,7 @@ import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.view.LayoutInflater
 import androidx.appcompat.view.ContextThemeWrapper
 import com.home.joseki.googlemapweatherchecker.R
+import com.home.joseki.googlemapweatherchecker.converters.Converter
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import kotlinx.android.synthetic.main.marker_view.view.*
 
@@ -28,7 +29,7 @@ class MapMarkerAdapter(
         val weatherInfo = map[marker]
 
         view.tvCityName.text = weatherInfo.let { it!!.name }
-        view.tvTemp.text = weatherInfo.let { it!!.main.temp }
+        view.tvTemp.text = weatherInfo.let { Converter.fahrenheitToCelsius(it!!.main.temp) }
 
         return view
     }

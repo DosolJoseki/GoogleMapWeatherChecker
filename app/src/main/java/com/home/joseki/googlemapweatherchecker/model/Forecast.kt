@@ -12,5 +12,5 @@ data class Forecast(
     @SerializedName("message")
     var message: String = "",
     @SerializedName("list")
-    var list: List<ForecastItem>? = null
+    var list: List<ForecastItem> = ArrayList()
 )

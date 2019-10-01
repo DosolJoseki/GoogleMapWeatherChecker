@@ -1,15 +1,14 @@
 package com.home.joseki.googlemapweatherchecker.fragments
 
 import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
+import com.home.joseki.googlemapweatherchecker.model.ForecastItem
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 class WeatherForecastFragmentPresenter(
     private val view: WeatherForecastFragment,
-    private val router: Router,
     private val interactor: IMapWeatherInteractor,
     weatherInfo: WeatherInfo
 ) {
@@ -25,11 +24,15 @@ class WeatherForecastFragmentPresenter(
             .subscribe(
                 {
                     view.hideUpdateProgress()
-                    view.fillForecast(it)
+                    view.fillWeekForecast(interactor.getWeekForecast(it))
                 },
                 {
                     Timber.e(it)
                 })
         )
+    }
+
+    fun onItemSelected(forecastItem: ForecastItem){
+        view.fillDailyForecast(interactor.getDailyForecast(forecastItem))
     }
 }

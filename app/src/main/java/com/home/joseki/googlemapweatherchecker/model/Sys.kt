@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Sys(
     @SerializedName("country")
-    private val country: String = "",
+    val country: String = "",
     @SerializedName("sunrise")
-    private val sunrise: String = "",
+    val sunrise: String = "",
     @SerializedName("sunset")
-    private val sunset: String = "",
+    val sunset: String = "",
     @SerializedName("message")
-    private val message: String = ""
+    val message: String = ""
 )
