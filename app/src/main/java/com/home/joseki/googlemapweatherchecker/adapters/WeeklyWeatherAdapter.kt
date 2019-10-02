@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.list_item_weekly.view.*
 import kotlin.collections.ArrayList
 
 
-class WeeklyWeatherAdapter: RecyclerView.Adapter<WeeklyWeatherAdapter.WeeklyWeatherViewHolder>() {
+class WeeklyWeatherAdapter : RecyclerView.Adapter<WeeklyWeatherAdapter.WeeklyWeatherViewHolder>() {
     private var items: ArrayList<ForecastItem> = ArrayList()
 
     val itemClickListener: PublishSubject<ForecastItem> = PublishSubject.create()
@@ -24,18 +24,33 @@ class WeeklyWeatherAdapter: RecyclerView.Adapter<WeeklyWeatherAdapter.WeeklyWeat
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeeklyWeatherViewHolder =
-        WeeklyWeatherViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_weekly, parent, false))
+        WeeklyWeatherViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.list_item_weekly,
+                parent,
+                false
+            )
+        )
 
-    override fun onBindViewHolder(holder: WeeklyWeatherViewHolder, position: Int) = holder.bind(items[position])
+    override fun onBindViewHolder(holder: WeeklyWeatherViewHolder, position: Int) =
+        holder.bind(items[position])
 
-    inner class WeeklyWeatherViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(item: ForecastItem){
+    inner class WeeklyWeatherViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: ForecastItem) {
             itemView.setOnClickListener { itemClickListener.onNext(item) }
 
-            itemView.tvTemp.text = item.main.let { Converter.fahrenheitToCelsius(it!!.temp) }
-            itemView.tvClouds.text = item.weather.let { it!!.first().description }
-            itemView.tvWind.text = item.wind.let { it!!.speed + "m/s, " + it.deg + "°" }
-            itemView.tvPressure.text = item.main.let { it!!.pressure }
+            itemView.tvTemp.text = item.main.let {
+                Converter.fahrenheitToCelsius(it!!.temp)
+            }
+            itemView.tvClouds.text = item.weather.let {
+                it!!.first().description
+            }
+            itemView.tvWind.text = item.wind.let {
+                it!!.speed + "m/s, " + it.deg + "°"
+            }
+            itemView.tvPressure.text = item.main.let {
+                it!!.pressure
+            }
             itemView.tvDaylight.text = "-"
             itemView.tvDateTime.text = item.dtTxt
 

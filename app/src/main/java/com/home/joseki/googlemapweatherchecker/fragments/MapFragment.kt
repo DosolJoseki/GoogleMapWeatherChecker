@@ -23,6 +23,7 @@ import com.home.joseki.googlemapweatherchecker.adapters.MapMarkerAdapter
 class MapFragment: Fragment(), OnMapReadyCallback {
     private lateinit var presenter: MapFragmentPresenter
     private lateinit var googleMap: GoogleMap
+    var isInitialazed: Boolean = false
 
     companion object {
         @JvmStatic
@@ -35,7 +36,6 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-        googleMap.clear()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -79,6 +79,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         }
 
         googleMap.setInfoWindowAdapter(MapMarkerAdapter(context, map))
+        isInitialazed = true
 
         val googlePlex = CameraPosition.builder()
             .target(LatLng(list[0].coord.lat, list[0].coord.lon))

@@ -16,36 +16,34 @@ class MapFragmentPresenter(
     private var compositeDisposable = CompositeDisposable()
 
     init {
-        //if(view.pokemonAdapter.itemCount == 0)
-        //    getPokemons(isRandom = false, addToList = false)
-
-        compositeDisposable.add(
-            interactor.getWeatherByAllCities()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        view.setWeatherPins(it)
-                        view.showUpdateProgress(false)
-                    },
-                    {
-                        Timber.e(it)
-                    }
-                )
-        )
-
-       /* compositeDisposable.add(
-        interactor.getWeatherByCoord("12", "42")
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    view.setWeather(it)
-                    view.showUpdateProgress(false)
-                },
-                {
-                    Timber.e(it)
-                }
+        if (!view.isInitialazed)
+            compositeDisposable.add(
+                interactor.getWeatherByAllCities()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {
+                            view.setWeatherPins(it)
+                            view.showUpdateProgress(false)
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                    )
             )
-        )*/
+
+        /* compositeDisposable.add(
+         interactor.getWeatherByCoord("12", "42")
+             .observeOn(AndroidSchedulers.mainThread())
+             .subscribe(
+                 {
+                     view.setWeather(it)
+                     view.showUpdateProgress(false)
+                 },
+                 {
+                     Timber.e(it)
+                 }
+             )
+         )*/
 
         /*compositeDisposable.add(
             interactor.getForecast("12", "42")
@@ -61,22 +59,22 @@ class MapFragmentPresenter(
                 )
         )*/
 
-       /* compositeDisposable.add(
-            interactor.getCities()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        view.setCity(it)
-                        view.showUpdateProgress(false)
-                    },
-                    {
-                        Timber.e(it)
-                    }
-                )
-        )*/
+        /* compositeDisposable.add(
+             interactor.getCities()
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(
+                     {
+                         view.setCity(it)
+                         view.showUpdateProgress(false)
+                     },
+                     {
+                         Timber.e(it)
+                     }
+                 )
+         )*/
     }
 
-    fun onMarkerClick(weatherInfo: WeatherInfo): Boolean{
+    fun onMarkerClick(weatherInfo: WeatherInfo): Boolean {
         weatherInfo.let {
             router.navigateTo(Screens.WeatherInfoScreen(weatherInfo))
         }
