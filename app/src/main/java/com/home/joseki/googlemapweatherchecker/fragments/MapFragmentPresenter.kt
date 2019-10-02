@@ -1,5 +1,6 @@
 package com.home.joseki.googlemapweatherchecker.fragments
 
+import androidx.core.content.ContextCompat
 import com.home.joseki.googlemapweatherchecker.di.navigation.Screens
 import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo

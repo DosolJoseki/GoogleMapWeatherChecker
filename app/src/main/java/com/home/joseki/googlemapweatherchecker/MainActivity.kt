@@ -1,13 +1,18 @@
 package com.home.joseki.googlemapweatherchecker
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.home.joseki.googlemapweatherchecker.di.Scopes
 import com.home.joseki.googlemapweatherchecker.di.navigation.MainRouter
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import toothpick.Toothpick
+
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         val scope = Toothpick.openScope(Scopes.APP)
         Toothpick.inject(this, scope)
         presenter = MainActivityPresenter(scope.getInstance(MainRouter::class.java))
+
+        checkPermission()
     }
 
     override fun onBackPressed() {
@@ -48,5 +55,23 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         presenter.onDestroy()
+    }
+
+    private fun checkPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                0
+            )
+        }
     }
 }
