@@ -5,7 +5,7 @@ import com.home.joseki.googlemapweatherchecker.model.Forecast
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 
 interface ILocalRepository {
-    fun getGpsCity()
+    fun getGpsCity(): CityInfo
     fun getWeatherInfo(): WeatherInfo
     fun getForecast():Forecast
 

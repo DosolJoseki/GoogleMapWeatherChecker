@@ -17,7 +17,7 @@ class MapFragmentPresenter(
 
     init {
         if (!view.isInitialazed)
-            compositeDisposable.add(
+            /*compositeDisposable.add(
                 interactor.getWeatherByAllCities()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -29,49 +29,20 @@ class MapFragmentPresenter(
                             Timber.e(it)
                         }
                     )
+            )*/
+
+            compositeDisposable.add(
+                interactor.getGpsCity()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {
+                            view.showUpdateProgress(false)
+                        },
+                        {
+                            Timber.e(it)
+                        }
+                    )
             )
-
-        /* compositeDisposable.add(
-         interactor.getWeatherByCoord("12", "42")
-             .observeOn(AndroidSchedulers.mainThread())
-             .subscribe(
-                 {
-                     view.setWeather(it)
-                     view.showUpdateProgress(false)
-                 },
-                 {
-                     Timber.e(it)
-                 }
-             )
-         )*/
-
-        /*compositeDisposable.add(
-            interactor.getForecast("12", "42")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        //view.setWeather(it)
-                        view.showUpdateProgress(false)
-                    },
-                    {
-                        Timber.e(it)
-                    }
-                )
-        )*/
-
-        /* compositeDisposable.add(
-             interactor.getCities()
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(
-                     {
-                         view.setCity(it)
-                         view.showUpdateProgress(false)
-                     },
-                     {
-                         Timber.e(it)
-                     }
-                 )
-         )*/
     }
 
     fun onMarkerClick(weatherInfo: WeatherInfo): Boolean {

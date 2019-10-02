@@ -1,17 +1,17 @@
 package com.home.joseki.googlemapweatherchecker.di.providers
 
-import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
-import com.home.joseki.googlemapweatherchecker.interactors.MapWeatherInteractor
+import com.home.joseki.googlemapweatherchecker.interactors.ForecastInteractor
+import com.home.joseki.googlemapweatherchecker.interactors.IForecastInteractor
 import com.home.joseki.googlemapweatherchecker.repositories.ICityRepository
 import com.home.joseki.googlemapweatherchecker.repositories.ILocalRepository
 import com.home.joseki.googlemapweatherchecker.repositories.IMapWeatherRepository
 import javax.inject.Inject
 import javax.inject.Provider
 
-class MapWeatherInteractorProvider @Inject constructor(
+class ForecastInteractorProvider @Inject constructor(
     private val weatherRepository: IMapWeatherRepository,
     private val cityRepository: ICityRepository,
     private val localRepository: ILocalRepository
-): Provider<IMapWeatherInteractor>{
-    override fun get(): IMapWeatherInteractor = MapWeatherInteractor(weatherRepository, cityRepository, localRepository)
+):Provider<IForecastInteractor> {
+    override fun get(): IForecastInteractor = ForecastInteractor(weatherRepository, cityRepository, localRepository)
 }

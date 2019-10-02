@@ -236,17 +236,6 @@
             "id": "1643448070"
         },
         {
-            "city": "Khorgo",
-            "city_ascii": "Khorgo",
-            "lat": "73.4833",
-            "lng": "113.63",
-            "country": "Russia",
-            "iso2": "RU",
-            "iso3": "RUS",
-            "admin_name": "Sakha (Yakutiya)",
-            "id": "1643550363"
-        },
-        {
             "city": "Kislovodsk",
             "city_ascii": "Kislovodsk",
             "lat": "43.91",

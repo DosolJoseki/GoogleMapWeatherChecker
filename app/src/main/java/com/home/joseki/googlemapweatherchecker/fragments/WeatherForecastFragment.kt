@@ -12,7 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.home.joseki.googlemapweatherchecker.R
 import com.home.joseki.googlemapweatherchecker.adapters.WeeklyWeatherAdapter
 import com.home.joseki.googlemapweatherchecker.di.Scopes
-import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
+import com.home.joseki.googlemapweatherchecker.interactors.IForecastInteractor
 import com.home.joseki.googlemapweatherchecker.model.ForecastItem
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import io.reactivex.disposables.CompositeDisposable
@@ -49,7 +49,7 @@ class WeatherForecastFragment(
         Toothpick.inject(this, scope)
         presenter = WeatherForecastFragmentPresenter(
             this,
-            scope.getInstance(IMapWeatherInteractor::class.java),
+            scope.getInstance(IForecastInteractor::class.java),
             weatherInfo
         )
 

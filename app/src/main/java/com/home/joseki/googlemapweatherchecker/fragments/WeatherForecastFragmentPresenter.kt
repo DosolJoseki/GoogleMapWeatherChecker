@@ -1,5 +1,6 @@
 package com.home.joseki.googlemapweatherchecker.fragments
 
+import com.home.joseki.googlemapweatherchecker.interactors.IForecastInteractor
 import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
 import com.home.joseki.googlemapweatherchecker.model.ForecastItem
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
@@ -9,7 +10,7 @@ import timber.log.Timber
 
 class WeatherForecastFragmentPresenter(
     private val view: WeatherForecastFragment,
-    private val interactor: IMapWeatherInteractor,
+    private val interactor: IForecastInteractor,
     weatherInfo: WeatherInfo
 ) {
 

@@ -1,31 +1,57 @@
 package com.home.joseki.googlemapweatherchecker.repositories
 
+import android.content.SharedPreferences
+import com.google.gson.Gson
 import com.home.joseki.googlemapweatherchecker.model.CityInfo
 import com.home.joseki.googlemapweatherchecker.model.Forecast
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 
-class LocalRepository: ILocalRepository {
+class LocalRepository(
+    private val sharedPreferences: SharedPreferences
+): ILocalRepository {
+
+    companion object{
+        private const val PREFS_CITY = "sharedPreferencesCity"
+        private const val PREFS_WEATHER = "sharedPreferencesWeather"
+        private const val PREFS_FORECAST = "sharedPreferencesForecast"
+    }
+
     override fun setGpsCity(cityInfo: CityInfo) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        with(sharedPreferences.edit()){
+            putString(PREFS_CITY, Gson().toJson(cityInfo))
+            commit()
+        }
     }
 
     override fun setWeatherInfo(weatherInfo: WeatherInfo) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        with(sharedPreferences.edit()){
+            putString(PREFS_WEATHER, Gson().toJson(weatherInfo))
+            commit()
+        }
     }
 
     override fun setForecast(forecast: Forecast) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        with(sharedPreferences.edit()){
+            putString(PREFS_FORECAST, Gson().toJson(forecast))
+            commit()
+        }
     }
 
-    override fun getGpsCity() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getGpsCity(): CityInfo {
+        return sharedPreferences.let {
+            Gson().fromJson(it.getString(PREFS_CITY, ""), CityInfo::class.java )
+        }
     }
 
     override fun getWeatherInfo(): WeatherInfo {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return sharedPreferences.let {
+            Gson().fromJson(it.getString(PREFS_WEATHER, ""), WeatherInfo::class.java )
+        }
     }
 
     override fun getForecast(): Forecast {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return sharedPreferences.let {
+            Gson().fromJson(it.getString(PREFS_FORECAST, ""), Forecast::class.java )
+        }
     }
 }

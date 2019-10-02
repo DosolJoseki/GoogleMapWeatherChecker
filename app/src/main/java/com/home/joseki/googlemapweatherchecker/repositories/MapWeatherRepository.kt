@@ -2,7 +2,6 @@ package com.home.joseki.googlemapweatherchecker.repositories
 
 import com.home.joseki.googlemapweatherchecker.model.Coord
 import com.home.joseki.googlemapweatherchecker.model.Forecast
-import com.home.joseki.googlemapweatherchecker.model.ForecastItem
 import io.reactivex.Observable
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import com.home.joseki.googlemapweatherchecker.web.api.IWeatherApi
