@@ -7,6 +7,7 @@ import com.home.joseki.googlemapweatherchecker.repositories.IMapWeatherRepositor
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MapWeatherInteractor @Inject constructor(
@@ -15,8 +16,8 @@ class MapWeatherInteractor @Inject constructor(
     private val localRepository: ILocalRepository
 ) : IMapWeatherInteractor {
 
-    override fun getGpsCity(): Maybe<CityInfo> {
-        return localRepository.getGpsCity()
+    override fun getGpsCity(): Maybe<CityInfo> =
+        localRepository.getGpsCity()
             .switchIfEmpty {
                 cityRepository.getGpsLocation()
             }
@@ -24,7 +25,7 @@ class MapWeatherInteractor @Inject constructor(
                 localRepository.setGpsCity(it)
                 it
             }
-    }
+
 
     override fun getWeatherByAllCities(): Single<List<WeatherInfo>> =
         getCities()

@@ -39,18 +39,14 @@ class LocalRepository(
         }
     }
 
-    override fun getGpsCity(): Maybe<CityInfo> {
-        return sharedPreferences.let {
-            if (it.getString(PREFS_CITY, "").equals(""))
-                Maybe
-                    .empty<CityInfo>()
-                    .subscribeOn(Schedulers.io())
-            else
-                Maybe.just(
-                    Gson().fromJson(it.getString(PREFS_CITY, ""), CityInfo::class.java)
-                ).subscribeOn(Schedulers.io())
+    override fun getGpsCity(): Maybe<CityInfo> =
+        Maybe.create<CityInfo> { emitter ->
+            sharedPreferences.getString(PREFS_CITY, null)?.let {
+                emitter.onSuccess(Gson().fromJson(it, CityInfo::class.java))
+            }
+                ?: emitter.onComplete()
         }
-    }
+            .subscribeOn(Schedulers.io())
 
     override fun getWeatherInfo(): WeatherInfo {
         return sharedPreferences.let {
