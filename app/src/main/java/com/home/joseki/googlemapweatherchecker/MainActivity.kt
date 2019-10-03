@@ -14,10 +14,16 @@ import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import toothpick.Toothpick
 
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var presenter: MainActivityPresenter
+    private var scope = Toothpick.openScope(Scopes.APP)
+
+    companion object{
+        private const val ACCESS_LOCATION_REQUEST = 0
+    }
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -25,11 +31,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val scope = Toothpick.openScope(Scopes.APP)
         Toothpick.inject(this, scope)
-        presenter = MainActivityPresenter(scope.getInstance(MainRouter::class.java))
 
-        checkPermission()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
+            presenter = MainActivityPresenter(scope.getInstance(MainRouter::class.java))
+        } else {
+            checkPermission()
+        }
     }
 
     override fun onBackPressed() {
@@ -58,20 +66,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPermission() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_NETWORK_STATE,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                0
-            )
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            0
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray) {
+        when (requestCode) {
+            ACCESS_LOCATION_REQUEST -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    presenter = MainActivityPresenter(scope.getInstance(MainRouter::class.java))
+                } else {
+                    exitProcess(-1)
+                }
+                return
+            }
         }
     }
+
 }

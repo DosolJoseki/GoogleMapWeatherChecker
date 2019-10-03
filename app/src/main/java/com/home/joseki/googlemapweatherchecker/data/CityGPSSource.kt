@@ -49,7 +49,7 @@ class CityGPSSource(
     }
 
      override fun getGpsCity(): Maybe<Location> =
-        Maybe.create<Location> { emitter ->
+        Maybe.create { emitter ->
             if (ContextCompat.checkSelfPermission( context, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
                 emitter.onComplete()
                 return@create

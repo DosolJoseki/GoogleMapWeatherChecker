@@ -14,21 +14,47 @@ class MapWeatherInteractor @Inject constructor(
     private val cityRepository: ICityRepository,
     private val localRepository: ILocalRepository
 ) : IMapWeatherInteractor {
-    override fun getGpsCity(): Maybe<CityInfo> =
-        cityRepository.getGpsLocation()
+
+    override fun getGpsCity(): Maybe<CityInfo> {
+        return localRepository.getGpsCity()
+            .switchIfEmpty {
+                cityRepository.getGpsLocation()
+            }
+            .map {
+                localRepository.setGpsCity(it)
+                it
+            }
+    }
 
     override fun getWeatherByAllCities(): Single<List<WeatherInfo>> =
-        cityRepository.getCities()
+        getCities()
             .flatMapObservable {
                 getWeatherIterable(it)
             }
             .toList()
 
-    override fun getCities(): Single<CityList> = cityRepository.getCities()
+    override fun getCities(): Single<CityList> {
+        var cityList: ArrayList<CityInfo> = ArrayList()
+
+        return cityRepository.getCities()
+            .map {
+                cityList = it.Cities as ArrayList<CityInfo>
+            }
+            .toMaybe()
+            .flatMap {
+                getGpsCity()
+            }
+            .map {
+                cityList.add(it)
+            }
+            .toSingle()
+            .map {
+                CityList(cityList)
+            }
+    }
 
     override fun getWeatherByCoord(coord: Coord): Observable<WeatherInfo> =
         weatherRepository.getWeather(coord)
-
 
     private fun getWeatherIterable(cityList: CityList): Observable<WeatherInfo> {
         return Observable.fromIterable(cityList.Cities)

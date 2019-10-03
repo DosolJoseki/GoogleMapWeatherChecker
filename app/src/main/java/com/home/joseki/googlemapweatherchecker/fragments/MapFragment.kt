@@ -82,7 +82,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         isInitialazed = true
 
         val googlePlex = CameraPosition.builder()
-            .target(LatLng(list[0].coord.lat, list[0].coord.lon))
+            .target(LatLng(list.last().coord.lat, list.last().coord.lon))
             .zoom(ZOOM)
             .build()
 
@@ -91,11 +91,5 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
     fun showUpdateProgress(boolean: Boolean){
 
-    }
-
-    fun setCity(cityList: CityList){
-        if (cityList == null) {
-            val i = 0
-        }
     }
 }

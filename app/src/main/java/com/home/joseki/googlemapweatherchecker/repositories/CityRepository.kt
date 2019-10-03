@@ -19,12 +19,7 @@ class CityRepository(
     override fun getGpsLocation(): Maybe<CityInfo> =
         cityGPSSource.getGpsCity()
             .subscribeOn(Schedulers.io())
-            .map { CityInfo(capitalCityName = "") }
-
-        /*getCities()
-            .flatMapMaybe { cities ->
-                cityGPSSource.getGpsCity()
-                    .filter { c -> cities.Cities?.firstOrNull { it.city == "" } != null }
-                    .map { c -> cities.Cities!!.first { it.city == "" } }
-            }*/
+            .map {
+                CityInfo(capitalCityName = "", lat = it.latitude, lon = it.longitude)
+            }
 }

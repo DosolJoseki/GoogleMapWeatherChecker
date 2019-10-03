@@ -1,6 +1,5 @@
 package com.home.joseki.googlemapweatherchecker.fragments
 
-import androidx.core.content.ContextCompat
 import com.home.joseki.googlemapweatherchecker.di.navigation.Screens
 import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
@@ -18,25 +17,12 @@ class MapFragmentPresenter(
 
     init {
         if (!view.isInitialazed)
-            /*compositeDisposable.add(
+            compositeDisposable.add(
                 interactor.getWeatherByAllCities()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         {
                             view.setWeatherPins(it)
-                            view.showUpdateProgress(false)
-                        },
-                        {
-                            Timber.e(it)
-                        }
-                    )
-            )*/
-
-            compositeDisposable.add(
-                interactor.getGpsCity()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        {
                             view.showUpdateProgress(false)
                         },
                         {
