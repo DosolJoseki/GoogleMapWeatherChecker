@@ -12,13 +12,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.home.joseki.googlemapweatherchecker.di.Scopes
 import com.home.joseki.googlemapweatherchecker.di.navigation.MainRouter
 import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
-import com.home.joseki.googlemapweatherchecker.model.CityList
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import toothpick.Toothpick
 import com.home.joseki.googlemapweatherchecker.R
 import com.google.android.gms.maps.model.*
 import com.home.joseki.googlemapweatherchecker.adapters.MapMarkerAdapter
-
+import com.home.joseki.googlemapweatherchecker.model.CityInfo
 
 class MapFragment: Fragment(), OnMapReadyCallback {
     private lateinit var presenter: MapFragmentPresenter
@@ -59,7 +58,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         )
     }
 
-    fun setWeatherPins(list: List<WeatherInfo>){
+    fun setWeatherPins(list: MutableList<WeatherInfo>){
         if(list.isNullOrEmpty())
             return
 
@@ -80,16 +79,14 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
         googleMap.setInfoWindowAdapter(MapMarkerAdapter(context, map))
         isInitialazed = true
+    }
 
+    fun setCamPosition(cityInfo: CityInfo){
         val googlePlex = CameraPosition.builder()
-            .target(LatLng(list.last().coord.lat, list.last().coord.lon))
+            .target(LatLng(cityInfo.lat, cityInfo.lon))
             .zoom(ZOOM)
             .build()
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), DURATION_MS, null)
-    }
-
-    fun showUpdateProgress(boolean: Boolean){
-
     }
 }

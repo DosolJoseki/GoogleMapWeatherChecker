@@ -7,8 +7,8 @@ import com.home.joseki.googlemapweatherchecker.repositories.IMapWeatherRepositor
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class MapWeatherInteractor @Inject constructor(
     private val weatherRepository: IMapWeatherRepository,
@@ -18,21 +18,25 @@ class MapWeatherInteractor @Inject constructor(
 
     override fun getGpsCity(): Maybe<CityInfo> =
         localRepository.getGpsCity()
-            .switchIfEmpty {
+            .switchIfEmpty (
                 cityRepository.getGpsLocation()
-            }
+            )
             .map {
                 localRepository.setGpsCity(it)
                 it
             }
 
 
-    override fun getWeatherByAllCities(): Single<List<WeatherInfo>> =
+    override fun getWeatherByAllCities(): Single<MutableList<WeatherInfo>> =
         getCities()
             .flatMapObservable {
                 getWeatherIterable(it)
             }
             .toList()
+            .map {
+                localRepository.setWeatherInfo(it)
+                it
+            }
 
     override fun getCities(): Single<CityList> {
         var cityList: ArrayList<CityInfo> = ArrayList()
@@ -56,6 +60,9 @@ class MapWeatherInteractor @Inject constructor(
 
     override fun getWeatherByCoord(coord: Coord): Observable<WeatherInfo> =
         weatherRepository.getWeather(coord)
+            .map {
+                it
+            }
 
     private fun getWeatherIterable(cityList: CityList): Observable<WeatherInfo> {
         return Observable.fromIterable(cityList.Cities)
@@ -63,4 +70,7 @@ class MapWeatherInteractor @Inject constructor(
                 weatherRepository.getWeather(Coord(it.lon, it.lat))
             }
     }
+
+    override fun getLocalWeather(): Maybe<MutableList<WeatherInfo>> =
+        localRepository.getWeatherInfo()
 }

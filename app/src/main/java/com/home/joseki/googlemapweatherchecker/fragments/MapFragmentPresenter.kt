@@ -23,13 +23,43 @@ class MapFragmentPresenter(
                     .subscribe(
                         {
                             view.setWeatherPins(it)
-                            view.showUpdateProgress(false)
+                            getLocation()
                         },
                         {
-                            Timber.e(it)
+                            getLocalData()
                         }
                     )
             )
+    }
+
+    private fun getLocation(){
+        compositeDisposable.add(
+            interactor.getGpsCity()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        view.setCamPosition(it)
+                    },
+                    {
+                        Timber.e(it)
+                    }
+                )
+        )
+    }
+
+    private fun getLocalData() {
+        compositeDisposable.add(
+            interactor.getLocalWeather()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        view.setWeatherPins(it)
+                    },
+                    {
+                        Timber.e(it)
+                    }
+                )
+        )
     }
 
     fun onMarkerClick(weatherInfo: WeatherInfo): Boolean {

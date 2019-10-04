@@ -1,7 +1,6 @@
 package com.home.joseki.googlemapweatherchecker.fragments
 
 import com.home.joseki.googlemapweatherchecker.interactors.IForecastInteractor
-import com.home.joseki.googlemapweatherchecker.interactors.IMapWeatherInteractor
 import com.home.joseki.googlemapweatherchecker.model.ForecastItem
 import com.home.joseki.googlemapweatherchecker.model.WeatherInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,7 +10,7 @@ import timber.log.Timber
 class WeatherForecastFragmentPresenter(
     private val view: WeatherForecastFragment,
     private val interactor: IForecastInteractor,
-    weatherInfo: WeatherInfo
+    private val weatherInfo: WeatherInfo
 ) {
 
     private var compositeDisposable = CompositeDisposable()
@@ -28,8 +27,24 @@ class WeatherForecastFragmentPresenter(
                     view.fillWeekForecast(interactor.getWeekForecast(it))
                 },
                 {
-                    Timber.e(it)
+                    getLocalData()
                 })
+        )
+    }
+
+    private fun getLocalData(){
+        compositeDisposable.add(
+            interactor.getLocalWeather(weatherInfo.coord)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        view.hideUpdateProgress()
+                        view.fillWeekForecast(interactor.getWeekForecast(it))
+                    },
+                    {
+                        Timber.e(it)
+                    }
+                )
         )
     }
 

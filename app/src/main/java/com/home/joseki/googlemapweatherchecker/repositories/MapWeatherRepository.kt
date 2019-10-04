@@ -15,7 +15,7 @@ class MapWeatherRepository @Inject constructor(
     companion object {
         private const val UNITS = "metric"
         private const val HOST = "community-open-weather-map.p.rapidapi.com"
-        private const val API_KEY = "45e3b571b8msh1525196d1d6cb36p19f5f2jsnda1b48f5181f"
+        private const val API_KEY = "INSERT_YOUR_GOOGLE_KEY"
     }
 
     override fun getWeather(coord: Coord): Observable<WeatherInfo> =
@@ -24,5 +24,7 @@ class MapWeatherRepository @Inject constructor(
 
     override fun getForecast(coord: Coord): Observable<Forecast> =
         weatherApi.getForecastByCoord(coord.lon, coord.lat, HOST, API_KEY)
+            .map {
+                it }
             .subscribeOn(Schedulers.io())
 }

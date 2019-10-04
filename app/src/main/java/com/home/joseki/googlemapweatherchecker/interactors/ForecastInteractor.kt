@@ -1,18 +1,17 @@
 package com.home.joseki.googlemapweatherchecker.interactors
 
 import com.home.joseki.googlemapweatherchecker.model.*
-import com.home.joseki.googlemapweatherchecker.repositories.ICityRepository
 import com.home.joseki.googlemapweatherchecker.repositories.ILocalRepository
 import com.home.joseki.googlemapweatherchecker.repositories.IMapWeatherRepository
+import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.Single
 import javax.inject.Inject
 
 class ForecastInteractor @Inject constructor(
     private val weatherRepository: IMapWeatherRepository,
-    private val cityRepository: ICityRepository,
     private val localRepository: ILocalRepository
 ): IForecastInteractor {
+
     private lateinit var selectedForecast: Forecast
 
     companion object {
@@ -21,28 +20,12 @@ class ForecastInteractor @Inject constructor(
         private const val END_INDEX_DATE = 10
     }
 
-    override fun getWeatherByAllCities(): Single<List<WeatherInfo>> =
-        cityRepository.getCities()
-            .flatMapObservable {
-                getWeatherIterable(it)
-            }
-            .toList()
-
     override fun getForecast(coord: Coord): Observable<Forecast> =
         weatherRepository.getForecast(coord)
-
-    override fun getCities(): Single<CityList> = cityRepository.getCities()
-
-    override fun getWeatherByCoord(coord: Coord): Observable<WeatherInfo> =
-        weatherRepository.getWeather(coord)
-
-
-    private fun getWeatherIterable(cityList: CityList): Observable<WeatherInfo> {
-        return Observable.fromIterable(cityList.Cities)
-            .flatMap {
-                weatherRepository.getWeather(Coord(it.lon, it.lat))
+            .map {
+                localRepository.setForecast(it, coord)
+                it
             }
-    }
 
     override fun getWeekForecast(forecast: Forecast): List<ForecastItem> {
         selectedForecast = forecast
@@ -78,4 +61,7 @@ class ForecastInteractor @Inject constructor(
             return fc
         }
     }
+
+    override fun getLocalWeather(coord: Coord): Maybe<Forecast> =
+        localRepository.getForecast(coord)
 }

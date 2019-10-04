@@ -9,5 +9,6 @@ interface IMapWeatherInteractor {
     fun getGpsCity(): Maybe<CityInfo>
     fun getWeatherByCoord(coord: Coord): Observable<WeatherInfo>
     fun getCities(): Single<CityList>
-    fun getWeatherByAllCities(): Single<List<WeatherInfo>>
+    fun getWeatherByAllCities(): Single<MutableList<WeatherInfo>>
+    fun getLocalWeather(): Maybe<MutableList<WeatherInfo>>
 }

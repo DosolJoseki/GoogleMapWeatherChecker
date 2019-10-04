@@ -20,6 +20,6 @@ class CityRepository(
         cityGPSSource.getGpsCity()
             .subscribeOn(Schedulers.io())
             .map {
-                CityInfo(capitalCityName = "", lat = it.latitude, lon = it.longitude)
+                CityInfo(capitalCityName = "gpsLocation", lat = it.latitude, lon = it.longitude)
             }
 }

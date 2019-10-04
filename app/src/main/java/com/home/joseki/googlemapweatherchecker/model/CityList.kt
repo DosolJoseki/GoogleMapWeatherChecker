@@ -1,5 +1,8 @@
 package com.home.joseki.googlemapweatherchecker.model
 
+import com.google.gson.annotations.SerializedName
+
 data class CityList(
-    var Cities: List<CityInfo>? = null
+    @SerializedName("Cities")
+    val Cities: List<CityInfo> = emptyList()
 )

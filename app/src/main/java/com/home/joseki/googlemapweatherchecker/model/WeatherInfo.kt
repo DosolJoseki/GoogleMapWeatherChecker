@@ -10,7 +10,7 @@ data class WeatherInfo(
     @SerializedName("coord")
     val coord: Coord,
     @SerializedName("weather")
-    val weather: List<Weather>,
+    val weather: MutableList<Weather>,
     @SerializedName("name")
     val name: String,
     @SerializedName("cod")
